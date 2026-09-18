@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>YouTube Player Host</title>
+<style>
+  html, body { margin:0; padding:0; background:#000; height:100%; overflow:hidden; }
+  #player { position:absolute; top:0; left:0; width:100%; height:100%; }
+  #player iframe { width:100%; height:100%; }
+</style>
+</head>
+<body>
+<div id="player"></div>
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+  function getVideoId() {
+    var params = new URLSearchParams(window.location.search);
+    return params.get('v');
+  }
+
+  var player;
+  function onYouTubeIframeAPIReady() {
+    var videoId = getVideoId();
+    player = new YT.Player('player', {
+      videoId: videoId,
+      playerVars: {
+        autoplay: 1, mute: 1, loop: 1, playlist: videoId,
+        controls: 0, playsinline: 1, rel: 0, modestbranding: 1,
+        fs: 0, disablekb: 1, iv_load_policy: 3
+      },
+      events: {
+        onError: function(e) {
+          if (window.webkit && window.webkit.messageHandlers.playerEvent) {
+            window.webkit.messageHandlers.playerEvent.postMessage({type: 'error', code: e.data});
+          }
+        }
+      }
+    });
+  }
+</script>
+</body>
+</html>
