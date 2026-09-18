@@ -23,6 +23,8 @@
     var videoId = getVideoId();
     player = new YT.Player('player', {
       videoId: videoId,
+      width: '100%',
+      height: '100%',
       playerVars: {
         autoplay: 1, mute: 1, loop: 1, playlist: videoId,
         controls: 0, playsinline: 1, rel: 0, modestbranding: 1,
